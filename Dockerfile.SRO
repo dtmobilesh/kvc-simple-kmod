@@ -3,12 +3,6 @@ ARG IMAGE=registry.access.redhat.com/ubi8/ubi
 FROM $IMAGE
 WORKDIR /build/
 
-# First update the base container to latest versions of everything
-# This is done in the driver-container-base
-# RUN yum update -y --setopt=install_weak_deps=False --best
-
-RUN yum -y install git
-
 # Expecting kmod software version as an input to the build
 ARG KMODVER
 
@@ -23,9 +17,7 @@ ARG KVER
 # packages can be installed. If it doesn't the following steps will
 # fail
 
-# Prep and build the module
-RUN yum install -y make sudo
-RUN make buildprep KVER=${KVER} KMODVER=${KMODVER}
+# Build the module
 RUN make all       KVER=${KVER} KMODVER=${KMODVER}
 RUN make install   KVER=${KVER} KMODVER=${KMODVER}
 
